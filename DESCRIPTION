@@ -1,4 +1,4 @@
-Package: hBase
+Package: rwbase
 Type: Package
 Title: base funs of hail's
 Version: 0.1.0
