@@ -2,15 +2,18 @@
 % Please edit documentation in R/utils.R
 \name{getCloudr}
 \alias{getCloudr}
-\title{获取icloud云盘地址。
-需要区分系统：windows or mac}
+\title{get icloud address}
 \usage{
 getCloudr()
 }
 \value{
-返回NULL 或 相应icloud文件夹地址
+NULL OR address of icloud folder.
 }
 \description{
-获取icloud云盘地址。
-需要区分系统：windows or mac
+depends OS system : windows or mac
+}
+\details{
+direction in windows:C:/Users/Administrator/iCloudDrive
+
+direction in macos:/Users/longsa/Library/Mobile Documents/com~apple~CloudDocs
 }

@@ -1,9 +1,15 @@
-# Hail's基础性功能函数
 
 
-#' 获取icloud云盘地址。
-#' 需要区分系统：windows or mac
-#' @return 返回NULL 或 相应icloud文件夹地址
+
+#' get icloud address
+#' @description
+#' depends OS system : windows or mac
+#' @usage getCloudr()
+#' @details
+#' direction in windows:C:/Users/Administrator/iCloudDrive
+#'
+#' direction in macos:/Users/longsa/Library/Mobile Documents/com~apple~CloudDocs
+#' @return NULL OR address of icloud folder.
 #' @export
 getCloudr <- function(){
   cdr = NULL
@@ -129,6 +135,7 @@ ckCols <- function(dt, cols){
 #' @param url 待下载文件的URL地址
 #' @param dest 文件下载地址，包含文件名
 #' @param dw 存在同名文件是否下载，默认为0不下载
+#' @importFrom utils download.file
 #' @return 下载成功返回地址，下载失败返回0
 #' @export
 downa <- function(url, dest = './', dw = 0){
@@ -180,6 +187,7 @@ roundt <-  function(x, digit = 2) {
 #' @param mcols 为需要进行转换的列
 #' @param digit 进行转换的单位基数，默认为1，不进行转换
 #' @param skipx 为“名-值”对，表示此列对应值所在行的mcols列的值不进行转换
+#' @importFrom data.table copy
 #' @return 返回转换后的数据
 #' @export
 setDigit <- function(dt, mcols = 'value', digit = 1, skipx = list()){
@@ -226,11 +234,14 @@ setDigit <- function(dt, mcols = 'value', digit = 1, skipx = list()){
   for(m in mcols)
     dw[grepl('%', get(m)), skp := 1]
 
-  #去掉mcols列的百分号，并转换为double类型
-  dw[, c(mcols) := map(.SD, ~gsub('%', '', .x)), .SDcols = mcols]
+  #去掉mcols列的百分号，并转换为double类型, gsub can't handle list of vectors.
+  # dw[, c(mcols) := purr::map(.SD, ~gsub('%', '', .x)), .SDcols = mcols]
+  dw[, c(mcols) := lapply(.SD, function(x) gsub('%', '', x)), .SDcols = mcols]
 
   #suppressWarnings关闭警告通知
-  dw[, c(mcols) := map(.SD, ~roundt(suppressWarnings(as.double(.x)), 2)),
+  # dw[, c(mcols) := purr::map(.SD, ~roundt(suppressWarnings(as.double(.x)), 2)),
+  #    .SDcols = mcols]
+  dw[, c(mcols) := lapply(.SD, function(x) roundt(suppressWarnings(as.double(x)), 2)),
      .SDcols = mcols]
 
   #对mcols列进行百万单位转换，跳过skp为1的行
@@ -312,6 +323,7 @@ replas <- function(x, pats, reps){
 #' @return 返回去重后的data.table数据
 #' @description 如果rpcols对应的dwcol包含有效值与NA，NA会全部保留,
 #' @description 如果rpcols对应的dwcol全部为NA，不处理(仅做全部列的unique处理)
+#' @importFrom data.table := setDT rbindlist
 #' @export
 deDups <- function(dt, rpcols = NULL, dwcol = NULL, ori = 1){
 
