@@ -16,11 +16,11 @@ jkCheck <- function(x = NULL, jktype = NULL){
 
   #jktype为长度为1的字符串
   if(is.null(jktype) || is.null(x)){
-    warning('arg jktype or x is null!')
+    message('arg jktype or x is null!')
     return(r)
 
   }else if(!is.character(jktype) || length(jktype) != 1 || !jktype %in% c('rtype', 'period', 'drc')){
-    warning('arg jktype must be one onf rtype/period/drc.')
+    message('arg jktype must be one onf rtype/period/drc.')
     return(r)
 
   }else if(jktype == 'rtype'){
@@ -35,7 +35,7 @@ jkCheck <- function(x = NULL, jktype = NULL){
 
   #x为长度为1的字符串
   if(!is.character(x) || length(x) != 1){
-    warning('arg x must be character of length 1.')
+    message('arg x must be character of length 1.')
     return(r)
 
   }else if(x %in% res){
@@ -130,13 +130,13 @@ api.jkdic <- function(rtype = 'debt', take = 500, skip = 0){
 
 #' 获取jkdic数据，从Teable通过api获取，或从本地postgreSQL获取
 #' @param rtype 财报类型，包含debt,benefit,cash,main 或 NULL-获取全部类型的数据
-#' @param src 数据源，0-从Teable获取数据，1-从本地postgres获取数据；NULL表示按0-1的顺序取数，取到即停止。
+#' @param src 数据源，0-从Teable获取数据，1-从本地postgres获取数据；NULL表示按0-1的顺序取数取到即止。
 #' @return 返回NULL 或者 data.table数据
 #' @export
 get.jkdic <- function(rtype = 'debt', src = NULL){
 
   rdics = NULL
-  if(!jkCheck(rtype, 'rtype') && is.null(rtype)){
+  if(!jkCheck(rtype, 'rtype') && !is.null(rtype)){
     stop('Arg:rtype must be NULL or  one of [debt|benefit|cash|main].\n')
   }
 

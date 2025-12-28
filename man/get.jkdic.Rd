@@ -9,7 +9,7 @@ get.jkdic(rtype = "debt", src = NULL)
 \arguments{
 \item{rtype}{财报类型，包含debt,benefit,cash,main 或 NULL-获取全部类型的数据}
 
-\item{src}{数据源，0-从Teable获取数据，1-从本地postgres获取数据；NULL表示按0-1的顺序取数，取到即停止。}
+\item{src}{数据源，0-从Teable获取数据，1-从本地postgres获取数据；NULL表示按0-1的顺序取数取到即止。}
 }
 \value{
 返回NULL 或者 data.table数据
