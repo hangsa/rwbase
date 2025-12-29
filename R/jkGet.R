@@ -432,12 +432,13 @@ jksRep <- function(symbs, rtp = 'debt', prd = 'year', pwd = './', dw = 0, gr = 0
   #添加各财报中需要自己计算的数据
   v = jkCalc(res, rtype = rtp, grate = gr, xrate = xr)
   #计算年度同比增长率
-  v = jkYoy(v, wcols = c('rtype', 'subtype', 'parent', 'serialno', 'name', 'symbol', 'subject'),
-            dcol = 'date', vcol = 'value')
+  # v = jkYoy(v, wcols = c('rtype', 'subtype', 'parent', 'serialno', 'name', 'symbol', 'subject'),
+  #           dcol = 'date', vcol = 'value')
 
   v = v[order(-date, serialno)]
 
-  h = jkConvert(v[, !c('yoy')], 'l2w')
+  # h = jkConvert(v[, !c('yoy')], 'l2w')
+  h = jkConvert(v, 'l2w')
 
   #vertical data for plots.
   res = list(v = v, h = h)
