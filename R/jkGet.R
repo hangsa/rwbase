@@ -330,6 +330,8 @@ jkCalc <- function(dt, rtype = 'debt', grate = 1, xrate = 0.08){
 
   #再次关联sql表，用于获取serialno, subject等相关信息
   r = jkCorl(r, rtype = rtype, corlby = 'name')
+  #去掉未关联的subject
+  r = r[!is.null(subject)]
 
 
   return(r)
@@ -389,6 +391,7 @@ jkYoy <- function(dt, wcols = 'name', dcol = 'date', vcol = 'value'){
 #' @param gr 为公司收益增长率，默认0.15
 #' @param xr 为10年期国债收益率,默认0.08
 #' @importFrom data.table :=
+#' @import magrittr
 #' @return 返回财报数据列表list，包括vertical、horizontal两个表
 #' @export
 jksRep <- function(symbs, rtp = 'debt', prd = 'year', pwd = './', dw = 0, gr = 0.15, xr = 0.08){
@@ -420,7 +423,7 @@ jksRep <- function(symbs, rtp = 'debt', prd = 'year', pwd = './', dw = 0, gr = 0
       next
     else{
       #转变为日期长数据，并将value单位清洗为百万
-      dtmp = jkConvert(jks[[i]], 'w2l') %>% jkMillis()
+      dtmp = jkConvert(jks[[i]], 'w2l') %>% jkMillis(., rtype = rtp)
       dtmp[, symbol := smb]
       res = rbind(res, dtmp)
     }
